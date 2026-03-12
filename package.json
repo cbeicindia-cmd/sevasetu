@@ -1,0 +1,10 @@
+{
+  "name": "sevasetu-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gram Panchayat level G2C/G2B portal prototype",
+  "scripts": {
+    "preview": "node server.js",
+    "check": "node --check app.js && node --check server.js"
+  }
+}

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SevaSetu Telangana & Andhra Pradesh Portal</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>SevaSetu South</h1>
+        <p>Telangana & Andhra Pradesh Gram Panchayat G2C / G2B Service Portal</p>
+      </div>
+      <div class="topbar-actions">
+        <label for="themeSelect">Theme</label>
+        <select id="themeSelect">
+          <option value="seva">Seva (Default)</option>
+          <option value="gov">Gov Blue</option>
+          <option value="contrast">High Contrast</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="card">
+        <h2>Register & Access</h2>
+        <form id="registerForm" class="grid-form">
+          <label>
+            Full name
+            <input type="text" id="name" required />
+          </label>
+          <label>
+            Mobile
+            <input type="tel" id="mobile" required pattern="[0-9]{10}" />
+          </label>
+          <label>
+            Aadhaar number
+            <input type="text" id="aadhaar" required pattern="[0-9]{12}" maxlength="12" />
+          </label>
+          <div class="inline-actions">
+            <button type="button" id="verifyAadhaarBtn">Verify Aadhaar</button>
+            <span id="aadhaarStatus" class="info">Aadhaar not verified</span>
+          </div>
+          <label>
+            OTP
+            <input type="text" id="otp" pattern="[0-9]{4,6}" placeholder="Enter OTP" />
+          </label>
+          <div class="inline-actions">
+            <button type="button" id="sendOtpBtn">Send OTP (MSG91)</button>
+            <button type="button" id="verifyOtpBtn">Verify OTP</button>
+          </div>
+          <p id="otpStatus" class="info">OTP not verified</p>
+          <label>
+            State
+            <select id="state" required>
+              <option value="telangana">Telangana</option>
+              <option value="andhra-pradesh">Andhra Pradesh</option>
+            </select>
+          </label>
+          <label>
+            Village / Panchayat
+            <input type="text" id="village" required />
+          </label>
+          <label>
+            User Type
+            <select id="role" required>
+              <option value="end-user">End User</option>
+              <option value="agent">Agent (CSC/Operator)</option>
+              <option value="super-admin">Super Admin</option>
+            </select>
+          </label>
+          <button type="submit" id="registerBtn" disabled>Register / Login</button>
+        </form>
+        <div id="activeUser" class="info"></div>
+      </section>
+
+      <section class="card">
+        <h2>State Scheme Directory (TS + AP)</h2>
+        <p>
+          Apply for multiple Telangana and Andhra Pradesh schemes and redirect to official
+          government portals.
+        </p>
+        <div class="controls">
+          <select id="stateFilter">
+            <option value="all">All States</option>
+            <option value="telangana">Telangana</option>
+            <option value="andhra-pradesh">Andhra Pradesh</option>
+            <option value="national">National</option>
+          </select>
+          <select id="categoryFilter">
+            <option value="all">All Categories</option>
+            <option value="g2c">G2C Citizen Services</option>
+            <option value="g2b">G2B Business Services</option>
+          </select>
+        </div>
+        <div id="schemeList" class="scheme-list"></div>
+      </section>
+
+      <section class="card" id="applicationPanel">
+        <h2>User Application Panel</h2>
+        <ul id="applications" class="applications"></ul>
+      </section>
+
+      <section class="card" id="agentPanel">
+        <h2>Agent Panel (Gram Panchayat Service Desk)</h2>
+        <ul>
+          <li>Manage TS/AP beneficiary applications.</li>
+          <li>Guide applicants on MeeSeva / AP official portals.</li>
+          <li>Earn configurable service commissions.</li>
+        </ul>
+        <div class="commission-box">
+          <label>
+            Service commission (%)
+            <input type="number" id="commissionRate" min="0" max="40" value="8" />
+          </label>
+          <button id="saveCommission">Save Commission Rules</button>
+        </div>
+        <p id="commissionNote" class="info"></p>
+      </section>
+
+      <section class="card" id="adminPanel">
+        <h2>Super Admin Panel</h2>
+        <form id="addSchemeForm" class="grid-form">
+          <label>
+            Scheme name
+            <input id="schemeName" required />
+          </label>
+          <label>
+            State
+            <select id="schemeState" required>
+              <option value="telangana">Telangana</option>
+              <option value="andhra-pradesh">Andhra Pradesh</option>
+              <option value="national">National</option>
+            </select>
+          </label>
+          <label>
+            Category
+            <select id="schemeCategory" required>
+              <option value="g2c">G2C</option>
+              <option value="g2b">G2B</option>
+            </select>
+          </label>
+          <label>
+            Official link
+            <input id="schemeLink" type="url" required />
+          </label>
+          <label>
+            Benefit summary
+            <input id="schemeBenefit" required />
+          </label>
+          <button type="submit">Add Scheme</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <small>Focused on Telangana and Andhra Pradesh citizen/business services at Panchayat level.</small>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
