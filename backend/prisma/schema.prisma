@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  BUYER
+  SELLER
+  SUPER_ADMIN
+  GOVERNMENT_OFFICER
+  MARKETPLACE_MANAGER
+  DISTRICT_COORDINATOR
+}
+
+enum OrderStatus {
+  PLACED
+  PACKED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id           String              @id @default(cuid())
+  name         String
+  email        String              @unique
+  passwordHash String
+  role         Role                @default(BUYER)
+  createdAt    DateTime            @default(now())
+  seller       Seller?
+  orders       Order[]
+  reviews      Review[]
+  incentives   UserIncentive[]
+  applications SchemeApplication[]
+}
+
+model Seller {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  storeName   String
+  district    String
+  state       String
+  approved    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id])
+  products    Product[]
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  products Product[]
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  sellerId    String
+  categoryId  String
+  name        String
+  description String
+  price       Decimal     @db.Decimal(10, 2)
+  inventory   Int
+  approved    Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  seller      Seller      @relation(fields: [sellerId], references: [id])
+  category    Category    @relation(fields: [categoryId], references: [id])
+  reviews     Review[]
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  buyerId     String
+  status      OrderStatus @default(PLACED)
+  totalAmount Decimal     @db.Decimal(10, 2)
+  createdAt   DateTime    @default(now())
+  buyer       User        @relation(fields: [buyerId], references: [id])
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model Scheme {
+  id                String              @id @default(cuid())
+  schemeName        String
+  ministry          String
+  state             String
+  category          String
+  eligibility       String
+  documentsRequired String
+  applicationLink   String
+  benefits          String
+  applications      SchemeApplication[]
+}
+
+model SchemeApplication {
+  id        String            @id @default(cuid())
+  userId    String
+  schemeId  String
+  status    ApplicationStatus @default(SUBMITTED)
+  documents Json
+  createdAt DateTime          @default(now())
+  user      User              @relation(fields: [userId], references: [id])
+  scheme    Scheme            @relation(fields: [schemeId], references: [id])
+}
+
+model UserIncentive {
+  id         String   @id @default(cuid())
+  userId     String
+  eventType  String
+  points     Int
+  rewardType String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+}
